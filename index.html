@@ -1,210 +1,485 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
- <meta charset="UTF-8">
- <title>WebGL 手势控制爱心粒子</title>
- <style>
-     body { margin: 0; overflow: hidden; background-color: #000; }
-     #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
-     /* 隐藏摄像头视频流，只用于后台分析 */
-     .input_video { display: none; }
-     #loading {
-         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-         color: white; font-family: sans-serif; font-size: 24px; pointer-events: none; z-index: 10;
-     }
- </style>
- <!-- 引入 Three.js -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
- <!-- 引入 MediaPipe Hands -->
- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张三 - 个人网站</title>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 CSS 文件 -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- ==================== 导航栏 ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">Zhang<span>.</span></a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">首页</a></li>
+                <li><a href="#about" class="nav-link">关于</a></li>
+                <li><a href="#skills" class="nav-link">技能</a></li>
+                <li><a href="#projects" class="nav-link">项目</a></li>
+                <li><a href="#contact" class="nav-link">联系</a></li>
+            </ul>
+            <!-- 移动端菜单按钮 -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-<div id="loading">正在加载模型与摄像头...<br>请允许摄像头权限</div>
-<div id="canvas-container"></div>
-<video class="input_video"></video>
+    <!-- ==================== 首页 / Hero 区域 ==================== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <p class="hero-greeting">你好，我是</p>
+            <h1 class="hero-title">张 三</h1>
+            <p class="hero-subtitle">
+                全栈开发工程师 / <span class="typed-text" id="typedText"></span><span class="cursor">|</span>
+            </p>
+            <p class="hero-description">
+                热衷于用代码创造优雅的数字体验。<br>专注于 Web 开发，追求简洁高效的技术实现。
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">查看作品</a>
+                <a href="#contact" class="btn btn-outline">联系我</a>
+            </div>
+            <div class="hero-social">
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="微信"><i class="fab fa-weixin"></i></a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-avatar">
+                <!-- 头像占位：可替换为真实图片 -->
+                <div class="avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+        <!-- 向下滚动指示器 -->
+        <a href="#about" class="scroll-down">
+            <span>向下滚动</span>
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </section>
 
-<script>
- // --- 1. Three.js 场景初始化 ---
- const scene = new THREE.Scene();
- const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
- camera.position.z = 30;
+    <!-- ==================== 关于我 ==================== -->
+    <section class="about section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">关于我</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <!-- 关于我图片占位 -->
+                    <div class="about-img-placeholder">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>热爱技术，持续学习</h3>
+                    <p>
+                        我是一名拥有 <strong>5年经验</strong> 的全栈开发工程师，目前坐标<strong>北京</strong>。
+                        擅长使用 React、Vue、Node.js 等技术构建现代化的 Web 应用。
+                    </p>
+                    <p>
+                        我相信好的代码不仅是功能实现，更是一种艺术表达。
+                        在业余时间，我喜欢参与开源项目，撰写技术博客，与社区共同成长。
+                    </p>
+                    <p>
+                        工作之外，我热爱摄影和旅行，用镜头记录生活的美好瞬间。
+                    </p>
+                    <div class="about-info-grid">
+                        <div class="info-item">
+                            <span class="info-label">姓名：</span>
+                            <span>张三</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">邮箱：</span>
+                            <span>zhangsan@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">城市：</span>
+                            <span>中国 · 北京</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">学历：</span>
+                            <span>计算机科学 · 硕士</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-primary">下载简历</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
- const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
- renderer.setSize(window.innerWidth, window.innerHeight);
- document.getElementById('canvas-container').appendChild(renderer.domElement);
+    <!-- ==================== 技能 ==================== -->
+    <section class="skills section bg-light" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">专业技能</h2>
+                <div class="section-line"></div>
+                <p class="section-subtitle">持续精进，不断拓展技术边界</p>
+            </div>
+            <div class="skills-grid">
+                <!-- 技能卡片 1 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <h3>前端开发</h3>
+                    <p>React / Vue / TypeScript</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 92%;"></div>
+                    </div>
+                    <span class="skill-percent">92%</span>
+                </div>
+                <!-- 技能卡片 2 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-server"></i></div>
+                    <h3>后端开发</h3>
+                    <p>Node.js / Python / Go</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%;"></div>
+                    </div>
+                    <span class="skill-percent">85%</span>
+                </div>
+                <!-- 技能卡片 3 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-database"></i></div>
+                    <h3>数据库</h3>
+                    <p>MySQL / MongoDB / Redis</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 80%;"></div>
+                    </div>
+                    <span class="skill-percent">80%</span>
+                </div>
+                <!-- 技能卡片 4 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-cloud"></i></div>
+                    <h3>DevOps</h3>
+                    <p>Docker / AWS / CI/CD</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 75%;"></div>
+                    </div>
+                    <span class="skill-percent">75%</span>
+                </div>
+                <!-- 技能卡片 5 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>UI/UX 设计</h3>
+                    <p>Figma / Adobe XD</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 70%;"></div>
+                    </div>
+                    <span class="skill-percent">70%</span>
+                </div>
+                <!-- 技能卡片 6 -->
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>移动端开发</h3>
+                    <p>React Native / Flutter</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 65%;"></div>
+                    </div>
+                    <span class="skill-percent">65%</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
- // --- 2. 创建爱心粒子系统 ---
- const particleCount = 3000; // 粒子数量
- const geometry = new THREE.BufferGeometry();
- const positions = new Float32Array(particleCount * 3);
- const targetPositions = new Float32Array(particleCount * 3); // 存储爱心形状的目标位置
- const randomPositions = new Float32Array(particleCount * 3); // 存储散开时的随机位置
+    <!-- ==================== 项目作品 ==================== -->
+    <section class="projects section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">精选项目</h2>
+                <div class="section-line"></div>
+                <p class="section-subtitle">每个项目都是一次成长的旅程</p>
+            </div>
+            <div class="projects-grid">
+                <!-- 项目 1 -->
+                <div class="project-card">
+                    <div class="project-img">
+                        <div class="project-img-placeholder">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag">全栈项目</span>
+                        <h3>电商平台</h3>
+                        <p>基于 React + Node.js 构建的全功能电商平台，支持支付集成与实时库存管理。</p>
+                        <div class="project-tech">
+                            <span>React</span><span>Node.js</span><span>MongoDB</span><span>Stripe</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 项目 2 -->
+                <div class="project-card">
+                    <div class="project-img">
+                        <div class="project-img-placeholder">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag">SaaS 产品</span>
+                        <h3>项目管理工具</h3>
+                        <p>团队协作看板应用，支持任务分配、甘特图视图与实时通知功能。</p>
+                        <div class="project-tech">
+                            <span>Vue</span><span>Python</span><span>PostgreSQL</span><span>WebSocket</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 项目 3 -->
+                <div class="project-card">
+                    <div class="project-img">
+                        <div class="project-img-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag">数据可视化</span>
+                        <h3>数据分析仪表盘</h3>
+                        <p>企业级数据可视化平台，使用 D3.js 实现多维数据交互展示。</p>
+                        <div class="project-tech">
+                            <span>TypeScript</span><span>D3.js</span><span>Go</span><span>Redis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="projects-more">
+                <a href="#" class="btn btn-outline">查看更多项目 <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
 
- // 爱心方程函数
- function getHeartPosition(t, scale = 1) {
-     const x = 16 * Math.pow(Math.sin(t), 3);
-     const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-     const z = 0; 
-     return { x: x * scale, y: y * scale, z: z * scale };
- }
+    <!-- ==================== 联系我 ==================== -->
+    <section class="contact section bg-light" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">联系我</h2>
+                <div class="section-line"></div>
+                <p class="section-subtitle">有合作意向？欢迎随时联系</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <h3>邮箱</h3>
+                        <p>zhangsan@example.com</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <h3>电话</h3>
+                        <p>+86 138-0000-0000</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <h3>地点</h3>
+                        <p>中国 · 北京市朝阳区</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                        <h3>工作时间</h3>
+                        <p>周一至周五 · 9:00 - 18:00</p>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="您的姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="您的邮箱" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="邮件主题">
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="5" placeholder="请输入您的消息..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        发送消息 <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
 
- for (let i = 0; i < particleCount; i++) {
-     // 生成爱心形状的目标点
-     // 为了让爱心立体一点，我们随机分布t，并在Z轴加一点随机扰动
-     const t = Math.random() * Math.PI * 2;
-     const scale = 0.5; 
-     const heartPos = getHeartPosition(t, scale);
-     
-     // 填充爱心内部 (随机缩放)
-     const r = Math.sqrt(Math.random()); 
-     
-     targetPositions[i * 3] = heartPos.x * r;
-     targetPositions[i * 3 + 1] = heartPos.y * r;
-     targetPositions[i * 3 + 2] = (Math.random() - 0.5) * 5; // Z轴厚度
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="#home" class="footer-logo">Zhang<span>.</span></a>
+                <div class="footer-social">
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="微信"><i class="fab fa-weixin"></i></a>
+                </div>
+                <p class="footer-copy">
+                    &copy; 2024 张三 · 个人网站. All Rights Reserved.
+                </p>
+                <p class="footer-credit">
+                    用 <i class="fas fa-heart"></i> 构建 · 保持热爱，奔赴山海
+                </p>
+            </div>
+        </div>
+    </footer>
 
-     // 生成散开的随机位置 (爆炸效果)
-     randomPositions[i * 3] = (Math.random() - 0.5) * 100;
-     randomPositions[i * 3 + 1] = (Math.random() - 0.5) * 60;
-     randomPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+    <!-- ==================== 返回顶部按钮 ==================== -->
+    <a href="#home" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 
-     // 初始位置设为散开状态
-     positions[i * 3] = randomPositions[i * 3];
-     positions[i * 3 + 1] = randomPositions[i * 3 + 1];
-     positions[i * 3 + 2] = randomPositions[i * 3 + 2];
- }
+    <!-- ==================== JavaScript ==================== -->
+    <script>
+        // ---------- 打字机效果 ----------
+        const typedTextEl = document.getElementById('typedText');
+        const roles = ['UI/UX 爱好者', '开源贡献者', '终身学习者', '摄影爱好者'];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
 
- geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        function typeEffect() {
+            const currentRole = roles[roleIndex];
+            if (isDeleting) {
+                typedTextEl.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                typedTextEl.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
 
- // 粒子材质
- const material = new THREE.PointsMaterial({
-     color: 0xff69b4, // 热粉色
-     size: 0.4,
-     transparent: true,
-     opacity: 0.8,
-     blending: THREE.AdditiveBlending
- });
+            if (!isDeleting && charIndex === currentRole.length) {
+                typeSpeed = 2000; // 停顿
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                typeSpeed = 300;
+            }
 
- const particles = new THREE.Points(geometry, material);
- scene.add(particles);
+            setTimeout(typeEffect, typeSpeed);
+        }
+        typeEffect();
 
- // --- 3. 交互逻辑变量 ---
- let gatherFactor = 0; // 0 = 完全散开, 1 = 完全聚合成爱心
- let targetGatherFactor = 0; // 目标聚合度，由手势控制
+        // ---------- 导航栏滚动效果 ----------
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
 
- // --- 4. MediaPipe Hands 配置 ---
- const videoElement = document.getElementsByClassName('input_video')[0];
+        window.addEventListener('scroll', () => {
+            // 导航栏阴影
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
 
- function onResults(results) {
-     document.getElementById('loading').style.display = 'none';
+            // 返回顶部按钮
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
 
-     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-         const landmarks = results.multiHandLandmarks[0];
+            // 激活当前导航链接
+            updateActiveNav();
+        });
 
-         // 计算手掌开合程度
-         // 简单算法：计算拇指指尖(4)与其他四指指尖(8,12,16,20)到手腕(0)的平均距离
-         const wrist = landmarks[0];
-         const fingerTips = [4, 8, 12, 16, 20];
-         let totalDist = 0;
+        // ---------- 滚动时更新活跃导航链接 ----------
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let currentSection = '';
 
-         fingerTips.forEach(idx => {
-             const tip = landmarks[idx];
-             const dist = Math.sqrt(
-                 Math.pow(tip.x - wrist.x, 2) + 
-                 Math.pow(tip.y - wrist.y, 2)
-             );
-             totalDist += dist;
-         });
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
 
-         const avgDist = totalDist / 5;
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
 
-         // 经验阈值：
-         // 握拳时，指尖距离手腕很近 (avgDist 约 0.1 - 0.2)
-         // 张开时，指尖距离手腕较远 (avgDist 约 0.4 - 0.6)
-         // 我们做一个映射：握拳(distance small) -> 聚合(factor 1), 张开 -> 散开(factor 0)
-         
-         // 动态调整这些阈值以适应摄像头的距离
-         const closeThreshold = 0.25; 
-         const openThreshold = 0.5;
+        // ---------- 移动端菜单切换 ----------
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const navLinksAll = document.querySelectorAll('.nav-link');
 
-         let normalized = (avgDist - closeThreshold) / (openThreshold - closeThreshold);
-         normalized = 1 - Math.min(Math.max(normalized, 0), 1); // 反转：距离越小(握拳)，值越大(1)
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
+        });
 
-         targetGatherFactor = normalized; 
+        navLinksAll.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        });
 
-     } else {
-         // 如果没有检测到手，默认缓慢散开
-         targetGatherFactor = 0;
-     }
- }
+        // ---------- 平滑滚动（兼容性增强） ----------
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetEl = document.querySelector(targetId);
+                if (targetEl) {
+                    e.preventDefault();
+                    const offset = 70;
+                    const targetPosition = targetEl.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
 
- const hands = new Hands({locateFile: (file) => {
-     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
- }});
+        // ---------- 滚动动画：元素进入视口时添加动画类 ----------
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        };
 
- hands.setOptions({
-     maxNumHands: 1,
-     modelComplexity: 1,
-     minDetectionConfidence: 0.5,
-     minTrackingConfidence: 0.5
- });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
- hands.onResults(onResults);
-
- const cameraUtils = new Camera(videoElement, {
-     onFrame: async () => {
-         await hands.send({image: videoElement});
-     },
-     width: 640,
-     height: 480
- });
- cameraUtils.start();
-
- // --- 5. 动画循环 ---
- function animate() {
-     requestAnimationFrame(animate);
-
-     // 粒子自身旋转动画
-     particles.rotation.y += 0.002;
-
-     // 平滑过渡聚合系数 (Lerp)
-     gatherFactor += (targetGatherFactor - gatherFactor) * 0.05;
-
-     // 更新粒子位置
-     const posAttr = particles.geometry.attributes.position;
-     const currentPositions = posAttr.array;
-
-     for (let i = 0; i < particleCount; i++) {
-         const idx = i * 3;
-         
-         // 目标位置插值：从 randomPositions 过渡到 targetPositions
-         const tx = randomPositions[idx] + (targetPositions[idx] - randomPositions[idx]) * gatherFactor;
-         const ty = randomPositions[idx+1] + (targetPositions[idx+1] - randomPositions[idx+1]) * gatherFactor;
-         const tz = randomPositions[idx+2] + (targetPositions[idx+2] - randomPositions[idx+2]) * gatherFactor;
-
-         // 增加一点动态浮动效果
-         currentPositions[idx] += (tx - currentPositions[idx]) * 0.1;
-         currentPositions[idx+1] += (ty - currentPositions[idx+1]) * 0.1;
-         currentPositions[idx+2] += (tz - currentPositions[idx+2]) * 0.1;
-     }
-
-     posAttr.needsUpdate = true;
-     renderer.render(scene, camera);
- }
-
- animate();
-
- // 窗口大小调整适配
- window.addEventListener('resize', () => {
-     camera.aspect = window.innerWidth / window.innerHeight;
-     camera.updateProjectionMatrix();
-     renderer.setSize(window.innerWidth, window.innerHeight);
- });
-</script>
+        // 观察所有需要动画的元素
+        document.querySelectorAll(
+            '.skill-card, .project-card, .contact-card, .about-image, .about-text, .section-header'
+        ).forEach(el => {
+            el.classList.add('animate-ready');
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
-
-
